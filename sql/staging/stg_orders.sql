@@ -34,9 +34,9 @@ SELECT
     CASE
         WHEN order_delivered_customer_date IS NOT NULL
             AND order_estimated_delivery_date IS NOT NULL
-            AND order_delivered_customer_date > order_estimated_delivery_date
+            AND DATE(order_delivered_customer_date) > DATE(order_estimated_delivery_date)
         THEN TRUE
         ELSE FALSE
-    END                                                 AS late_delivery
+    END                                                 AS is_late_delivery
 
 FROM `ai-bi-pipeline.raw_olist.orders`;
