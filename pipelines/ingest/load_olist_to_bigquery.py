@@ -45,6 +45,17 @@ LENIENT_FILES = {
     "olist_order_reviews_dataset.csv",
 }
 
+# Files where every column is STRING, which defeats autodetect's header
+# heuristic (it decides row 1 is a header by finding a type mismatch against
+# the data rows, and has no signal to work with when all columns are STRING).
+# These get an explicit schema instead of autodetect.
+EXPLICIT_SCHEMA_FILES = {
+    "product_category_name_translation.csv": [
+        bigquery.SchemaField("product_category_name", "STRING"),
+        bigquery.SchemaField("product_category_name_english", "STRING"),
+    ],
+}
+
 # ── Load Job Configs ────────────────────────────────────────────────────────────
 
 def make_standard_load_job_config():
@@ -77,6 +88,23 @@ def make_lenient_load_job_config():
     )
 
 
+def make_explicit_schema_load_job_config(schema):
+    """
+    Explicit-schema config for files where every column is STRING.
+    BigQuery's autodetect decides whether row 1 is a header by looking for a
+    type mismatch against the data rows -- when all columns are STRING it has
+    nothing to key off of, and silently falls back to generic column names
+    (string_field_0, string_field_1, ...) instead of failing loudly.
+    Passing an explicit schema sidesteps that heuristic entirely.
+    """
+    return bigquery.LoadJobConfig(
+        source_format=bigquery.SourceFormat.CSV,
+        skip_leading_rows=1,
+        schema=schema,
+        write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
+    )
+
+
 # ── Main Ingestion ──────────────────────────────────────────────────────────────
 
 def load_olist_files():
@@ -99,6 +127,9 @@ def load_olist_files():
         if filename in LENIENT_FILES:
             job_config  = make_lenient_load_job_config()
             config_note = "(lenient parsing)"
+        elif filename in EXPLICIT_SCHEMA_FILES:
+            job_config  = make_explicit_schema_load_job_config(EXPLICIT_SCHEMA_FILES[filename])
+            config_note = "(explicit schema)"
         else:
             job_config  = make_standard_load_job_config()
             config_note = "(standard parsing)"
