@@ -48,7 +48,7 @@ SELECT
 
     -- Product
     p.product_id,
-    p.category_name     AS product_category,
+    INITCAP(REPLACE(p.category_name, '_', ' '))   AS product_category,
     p.weight_g,
     p.length_cm,
     p.height_cm,
