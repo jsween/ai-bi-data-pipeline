@@ -6,7 +6,7 @@
 
 -- 1. Row count should match the expected number of days in the range
 -- 2016-01-01 through 2020-12-31 inclusive = 1,827 days
-SELECT COUNT(*) AS row_count
+SELECT COUNT(*) = 1827 AS row_count_matches
 FROM `ai-bi-pipeline.warehouse.dim_date`;
 
 -- 2. No null date_key or full_date

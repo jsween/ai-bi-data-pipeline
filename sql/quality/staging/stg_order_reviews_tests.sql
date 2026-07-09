@@ -41,10 +41,16 @@ SELECT COUNT(*) AS negative_response_times
 FROM `ai-bi-pipeline.staging.stg_order_reviews`
 WHERE response_time_days < 0;
 
--- 6. Response time within a reasonable bound - flag anything above 60 days for review
-SELECT COUNT(*) AS response_time_outliers
-FROM `ai-bi-pipeline.staging.stg_order_reviews`
-WHERE response_time_days > 60;
+-- 6. Response time distribution - eyeball check
+-- Known long-tail behavior: most reviews get answered quickly, but a small
+-- number take much longer (observed max: 518 days)
+SELECT
+    MIN(response_time_days)             AS min_response_time,
+    ROUND(AVG(response_time_days), 1)   AS avg_response_time,
+    MAX(response_time_days)             AS max_response_time,
+    COUNTIF(response_time_days > 60)    AS over_60_days,
+    COUNTIF(response_time_days > 180)   AS over_180_days
+FROM `ai-bi-pipeline.staging.stg_order_reviews`;
 
 -- 7. Distinct scores - eyeball check for unexpected values
 SELECT score, COUNT(*) AS review_count

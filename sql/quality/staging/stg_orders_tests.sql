@@ -17,7 +17,7 @@ SELECT
 FROM raw_count, staging_count;
 
 -- 1. Row count should be > 0
-SELECT COUNT(*) AS row_count
+SELECT COUNT(*) > 0 AS has_rows
 FROM `ai-bi-pipeline.staging.stg_orders`;
 
 -- 2. No null order_ids (primary key)
@@ -32,8 +32,12 @@ GROUP BY order_id
 HAVING COUNT(*) > 1;
 
 -- 4. Valid order_status values only
-SELECT DISTINCT order_status
-FROM `ai-bi-pipeline.staging.stg_orders`;
+SELECT COUNT(*) AS unexpected_statuses
+FROM `ai-bi-pipeline.staging.stg_orders`
+WHERE order_status NOT IN (
+    'APPROVED', 'CANCELED', 'CREATED', 'DELIVERED',
+    'INVOICED', 'PROCESSING', 'SHIPPED', 'UNAVAILABLE'
+);
 
 -- 5. Delivered date should never be before purchase date
 SELECT COUNT(*) AS bad_dates

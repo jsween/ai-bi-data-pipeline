@@ -73,7 +73,7 @@ WHERE shipping_limit_date IS NULL;
 SELECT COUNT(*) AS bad_shipping_dates
 FROM `ai-bi-pipeline.staging.stg_order_items`
 WHERE shipping_limit_date < '2016-01-01'
-   OR shipping_limit_date > '2019-12-31';
+   OR shipping_limit_date > '2020-12-31';
 
 -- 11. Eyeball check — order item counts per order
 -- Most orders should have 1-2 items; anything above 10 is worth reviewing

@@ -17,7 +17,7 @@ staging_count AS (
 SELECT
     distinct_raw_zips.zip_count     AS distinct_raw_zip_prefixes,
     staging_count.row_count         AS staging_row_count,
-    distinct_raw_zips.zip_count <= staging_count.row_count AS counts_are_plausible
+    staging_count.row_count <= distinct_raw_zips.zip_count AS counts_are_plausible
 FROM distinct_raw_zips, staging_count;
 
 -- 2. No null zip_code_prefix (key)
