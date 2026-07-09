@@ -31,7 +31,7 @@ SELECT
     EXTRACT(DAYOFWEEK FROM full_date)                   AS day_of_week,
     FORMAT_DATE('%A', full_date)                        AS day_name,
     EXTRACT(WEEK FROM full_date)                        AS week_of_year,
-    EXTRACT(DAYOFWEEK FROM full_date) IN (1, 7)          AS is_weekend
+    EXTRACT(DAYOFWEEK FROM full_date) IN (1, 7)         AS is_weekend
 
 FROM date_spine
 ORDER BY full_date;
