@@ -4,6 +4,21 @@ An end-to-end data engineering and business intelligence project demonstrating
 a modern analytics stack: data ingestion, warehouse design, data quality,
 and AI-assisted workflows feeding a BI visualization layer.
 
+
+## Dashboards
+
+### Looker Studio
+Interactive dashboard covering revenue trends, product performance, delivery SLAs, and customer geography, built on top of the `reporting.rpt_order_items_summary` view and the `warehouse` fact tables.
+
+[View live dashboard →](https://datastudio.google.com/u/0/reporting/aed1d70d-09e7-4f9f-a08f-bbefb02c8746/page/LZV3F)
+
+![Looker Studio dashboard](docs/screenshots/looker_studio_dashboard.png)
+
+### Metabase
+The same set of visualizations recreated in Metabase (self-hosted via Docker), connected directly to the BigQuery warehouse — built to compare BI tooling on top of the same dimensional model.
+
+![Metabase dashboard](docs/screenshots/metabase_dashboard.png)
+
 ## Stack
 - **Warehouse:** Google BigQuery (GCP)
 - **Storage:** Google Cloud Storage
